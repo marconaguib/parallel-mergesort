@@ -1,34 +1,34 @@
-%%cu
+// Version single file 
+#include <stdlib.h> 
 #include <stdio.h>
-#include <stdlib.h>
 
 // Pour pouvoir experimenter les performances avec les différents types
 // FMT  Permet d'avoir un % adapté pour le printf et donc de pas avoir de warning
-#define TYPE int
+#define TYPE int 
 #define FMT  "d"
 
-typedef struct
+typedef struct 
 {
-   int x ;
-   int y ;
-}  Point ;
+   int x ; 
+   int y ; 
+}  Point ; 
 
 
-__global__ void PathBig(TYPE * CudaVecteurA, TYPE * CudaVecteurB, int sizeA , int sizeB, int * CudaDiagBx, int * CudaDiagAy, int nbthread, int NbWindows)
+__global__ void PathBig(TYPE * CudaVecteurA, TYPE * CudaVecteurB, int sizeA , int sizeB, int * CudaDiagBx, int * CudaDiagAy, int nbthread, int NbWindows)  
 {
-    //Initialisation diagolane
-    CudaDiagBx[0] = CudaDiagAy[0] = 0 ;
-    CudaDiagBx[NbWindows] = sizeB ;
-    CudaDiagAy[NbWindows] = sizeA ;
-
-    int nth = threadIdx.x; // On explore le nth diagonale
-    Point K, P, Q ;
-    int   px , py ;
-    TYPE * A = CudaVecteurA ;
-    TYPE * B = CudaVecteurB ;
-    int offset ;
-    int numDiag  = (nth+1) * nbthread -1 ; // Les tableaux vont de 0 à N-1
-	  if (numDiag > sizeA)
+    //Initialisation diagolane 
+    CudaDiagBx[0] = CudaDiagAy[0] = 0 ; 
+    CudaDiagBx[NbWindows] = sizeB ;  
+    CudaDiagAy[NbWindows] = sizeA ;  
+   
+    int nth = threadIdx.x; // On explore le nth diagonale 
+    Point K, P, Q ; 
+    int   px , py ; 
+    TYPE * A = CudaVecteurA ; 
+    TYPE * B = CudaVecteurB ; 
+    int offset ; 
+    int numDiag  = (nth+1) * nbthread -1 ; // Les tableaux vont de 0 à N-1 
+	  if (numDiag > sizeA) 
         {
     		K.x = numDiag - sizeA ; K.y = sizeA ;
     		P.x = sizeA ; P.y = numDiag - sizeA ;
@@ -40,8 +40,8 @@ __global__ void PathBig(TYPE * CudaVecteurA, TYPE * CudaVecteurB, int sizeA , in
     	}
     	while (1)
         {
-             offset = abs(K.y - P.y) / 2 ;
-             Q.x = K.x + offset ; Q.y = K.y - offset ;
+             offset = abs(K.y - P.y) / 2 ; 
+             Q.x = K.x + offset ; Q.y = K.y - offset ; 
 
              if ( (Q.y >= 0) && (Q.x <= sizeB) &&
                   ( (Q.y == sizeA) || (Q.x == 0) || (A[Q.y] > B[Q.x -1])) )
@@ -50,15 +50,15 @@ __global__ void PathBig(TYPE * CudaVecteurA, TYPE * CudaVecteurB, int sizeA , in
                   {
                        px = Q.x ; py = Q.y ;
                        if ((Q.y < sizeA) && ((Q.x == sizeB) || (A[Q.y] <= B[Q.x])))
-                       {  // v = A[Q.y] ;
-                          py ++ ;
+                       {  // v = A[Q.y] ; 
+                          py ++ ; 
                        }
                        else
-                       {  // v = B[Q.x] ;
-                          px ++ ;
+                       {  // v = B[Q.x] ; 
+                          px ++ ; 
                        }
-                       // printf("Analyse Diagonale Point de Sortie ref %d - M %" FMT " Q (A Q.y %d) (B Q.x %d) rv.x %d rv.y %d\n",i,v,Q.y,Q.x,rv->x,rv->y) ;
-                       CudaDiagBx[nth+1] = px ; CudaDiagAy[nth+1] = py ;
+                       // printf("Analyse Diagonale Point de Sortie ref %d - M %" FMT " Q (A Q.y %d) (B Q.x %d) rv.x %d rv.y %d\n",i,v,Q.y,Q.x,rv->x,rv->y) ; 
+                       CudaDiagBx[nth+1] = px ; CudaDiagAy[nth+1] = py ; 
                        break ; // Pour simuler passage au thread suivant
                   }
                   else
@@ -69,26 +69,26 @@ __global__ void PathBig(TYPE * CudaVecteurA, TYPE * CudaVecteurB, int sizeA , in
     	}
 } // End of PathBig
 
-__global__ void MergeBig_k(TYPE * CudaVecteurA, TYPE * CudaVecteurB, TYPE * CudaVecteurC, int * CudaDiagAy, int * CudaDiagBx , int nbthread)
-{
+__global__ void MergeBig_k(TYPE * CudaVecteurA, TYPE * CudaVecteurB, TYPE * CudaVecteurC, int * CudaDiagAy, int * CudaDiagBx , int nbthread) 
+{ 	
 
     // int i = threadIdx.x ;     // On renge le Ieme element
-    int i = blockIdx.x * blockDim.x + threadIdx.x; // On range le ieme elet
-    int diag = (i / nbthread)  ;   // Dans quel fenêtre est-il ?
-    int indC = nbthread * diag ;
-
-    TYPE *A = CudaVecteurA+CudaDiagAy[diag] ;
-    TYPE *B = CudaVecteurB+CudaDiagBx[diag] ;
-    TYPE *M = CudaVecteurC + indC  ;
-    int sizeA = CudaDiagAy[diag+1]-CudaDiagAy[diag] ;
-    int sizeB = CudaDiagBx[diag+1]-CudaDiagBx[diag] ;
+    int i = blockIdx.x * blockDim.x + threadIdx.x; // On range le ieme elet 
+    int diag = (i / nbthread)  ;   // Dans quel fenêtre est-il ?  
+    int indC = nbthread * diag ; 
+    
+    TYPE *A = CudaVecteurA+CudaDiagAy[diag] ; 
+    TYPE *B = CudaVecteurB+CudaDiagBx[diag] ; 
+    TYPE *M = CudaVecteurC + indC  ;  
+    int sizeA = CudaDiagAy[diag+1]-CudaDiagAy[diag] ; 
+    int sizeB = CudaDiagBx[diag+1]-CudaDiagBx[diag] ; 
 
     Point K, P, Q;
     int offset ;
-
+ 
     i = i % nbthread ; // On recadre i dans le nouvel espace
     if (i >= (sizeA + sizeB)) { return ;  }  // On gère les ébordements
-    if (i > sizeA)
+    if (i > sizeA) 
     {
        K.x = i - sizeA ; K.y = sizeA ;
        P.x = sizeA ; P.y = i - sizeA ;
@@ -100,8 +100,8 @@ __global__ void MergeBig_k(TYPE * CudaVecteurA, TYPE * CudaVecteurB, TYPE * Cuda
     }
     while (1)
     {
-         offset = abs(K.y - P.y) / 2 ;
-         Q.x = K.x + offset ; Q.y = K.y - offset ;
+         offset = abs(K.y - P.y) / 2 ; 
+         Q.x = K.x + offset ; Q.y = K.y - offset ; 
 
          if ( (Q.y >= 0) && (Q.x <= sizeB) &&
               ( (Q.y == sizeA) || (Q.x == 0) || (A[Q.y] > B[Q.x -1])) )
@@ -112,7 +112,7 @@ __global__ void MergeBig_k(TYPE * CudaVecteurA, TYPE * CudaVecteurB, TYPE * Cuda
                    {  M[i] = A[Q.y] ; }
                    else
                    {  M[i] = B[Q.x] ; }
-                   break ;
+                   break ; 
               }
               else
               {  K.x = Q.x + 1 ; K.y = Q.y - 1 ; }
@@ -137,45 +137,45 @@ int check(char * msg, int Nb, TYPE * pto)
         }
         pt1 ++ ; pt2 ++ ;
     }
-    printf("Premiere valeur de %s = % "FMT", deuxième valeur = %"FMT", troisième valeur = %"FMT" \n", msg, pto[0], pto[1], pto[2]);
+    printf("Premiere valeur de %s = %" FMT ", deuxième valeur = %" FMT ", troisième valeur = %" FMT " \n", msg, pto[0], pto[1], pto[2]);
     printf("Check %s pour %d est OK \n", msg, Nb) ;
     return 0 ;
 }
 
 void Affiche(char * tabMsg, TYPE * ptBuffer, int NB)
-{
-   TYPE * pt = ptBuffer ;
-   for ( int k = 0 ; k < NB  ; k++ , pt ++)
-   {   printf(" - %s[%03d] = %6" FMT, tabMsg, k , *pt) ;
-       if ((k % 5) == (4))
+{  
+   TYPE * pt = ptBuffer ; 
+   for ( int k = 0 ; k < NB  ; k++ , pt ++) 
+   {   printf(" - %s[%03d] = %6" FMT, tabMsg, k , *pt) ; 
+       if ((k % 5) == (4)) 
        {  printf("\n") ; }
    }
    printf("\n") ;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char ** argv) 
 {
     //déclaration
     int sizeA = 1600;
     int sizeB = 1000 ;
-    int sizeM = sizeA + sizeB ;
-    TYPE* A;
-    TYPE* B ;
+    int sizeM = sizeA + sizeB ; 
+    TYPE* A; 
+    TYPE* B ; 
     TYPE* M;
-
-    float m1;
-    cudaEvent_t Start; cudaEvent_t Stop; cudaEventCreate(&Start) ; cudaEventCreate(&Stop) ;
-
+ 
+    float m1; 
+    cudaEvent_t Start; cudaEvent_t Stop; cudaEventCreate(&Start) ; cudaEventCreate(&Stop) ; 
+ 
     //allocation
     if ((A = (TYPE *) malloc(sizeA * sizeof(TYPE))) == NULL)
         { printf("PB allocation VecteurA\n") ; exit (1) ; }
-
+ 
     if ((B= (TYPE *) malloc(sizeB * sizeof(TYPE))) == NULL)
         { printf("PB allocation VecteurB\n") ; exit (1) ; }
-
+ 
     if ((M= (TYPE *) malloc(sizeM * sizeof(TYPE))) == NULL)
         { printf("PB allocation VecteurM\n") ; exit (1) ; }
-
+ 
     //initialisation
     srand(1925);
     A[0] = B[0] = rand()%100;
@@ -187,47 +187,47 @@ int main(int argc, char ** argv)
     {
         B[i]=B[i-1]+rand()%100;
     }
-
+ 
   //Declarations
     cudaError_t errCuda;
-    TYPE * CudaVecteurA = NULL ;
-    TYPE * CudaVecteurB = NULL ;
-    TYPE * CudaVecteurM = NULL ;
+    TYPE * CudaVecteurA = NULL ; 
+    TYPE * CudaVecteurB = NULL ; 
+    TYPE * CudaVecteurM = NULL ; 
 
-    int nbthread = 512;  // a verifier
+    int nbthread = 512;  // a verifier 
     int NbDiagonale  = (sizeA + sizeB) / nbthread ;
-    int NbWindows    = NbDiagonale ;
+    int NbWindows    = NbDiagonale ; 
     NbWindows       += (((sizeA + sizeB) % nbthread) == 0)?0:1 ;  // si (SizeA + SizeB) % nbthread == 0 alors nbWindows = 0  sinon = 1
     int  * CudaDiagBx   = NULL ;
     int  * CudaDiagAy   = NULL ;
-
-    //Allocation
+ 
+    //Allocation 
     if (cudaSuccess != (errCuda = cudaMalloc((void**)&CudaVecteurA, sizeA * sizeof(TYPE))))
         { printf("PB allocation CudaVecteurA - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout) ; exit (1) ; } // cleanup a rajouter pour plus propre
     if (cudaSuccess != (errCuda = cudaMalloc((void**)&CudaVecteurB, sizeB * sizeof(TYPE))))
         { printf("PB allocation CudaVecteurB - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout); exit (1) ; }  // cleanup a rajouter pour plus propre
     if (cudaSuccess != (errCuda = cudaMalloc((void**)&CudaVecteurM, sizeM * sizeof(TYPE))))
-        { printf("PB allocation CudaVecteurM - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout); exit (1) ; }
+        { printf("PB allocation CudaVecteurM - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout); exit (1) ; } 
 
      if (cudaSuccess != (errCuda = cudaMalloc((void**)&CudaDiagBx, (NbWindows + 1) * sizeof(int))))
         { printf("PB allocation CudaDiagBx - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout); exit (1) ; }
-
+   
      if (cudaSuccess != (errCuda = cudaMalloc((void**)&CudaDiagAy, (NbWindows + 1)* sizeof(int))))
        { printf("PB allocation CudaDiagAy - %d - %s \n",errCuda,cudaGetErrorName(errCuda)) ; fflush(stdout);  exit (1) ; }
-
+    
     if (cudaSuccess != cudaMemcpy(CudaVecteurA, A, sizeA * sizeof(TYPE), cudaMemcpyHostToDevice))
-        { printf("PB copie host A -> cuda A \n") ; fflush(stdout);  exit(2) ; }
-
+        { printf("PB copie host A -> cuda A \n") ; fflush(stdout);  exit(2) ; } 
+    
     if (cudaSuccess != cudaMemcpy(CudaVecteurB, B, sizeB * sizeof(TYPE), cudaMemcpyHostToDevice))
-        { printf("PB copie host B -> cuda B \n") ; fflush(stdout);  exit(2) ; }
-
+        { printf("PB copie host B -> cuda B \n") ; fflush(stdout);  exit(2) ; } 
+ 
     cudaEventRecord(Start);
 
     PathBig<<<1,NbDiagonale>>>(CudaVecteurA, CudaVecteurB, sizeA , sizeB, CudaDiagBx, CudaDiagAy, nbthread,NbWindows) ;
-
-    int nbBlock  = (sizeA+sizeB) / 1024 ;
-    nbBlock += ((sizeA+sizeB) % 1024)?1:0 ;
-
+ 
+    int nbBlock  = (sizeA+sizeB) / 1024 ; 
+    nbBlock += ((sizeA+sizeB) % 1024)?1:0 ; 
+ 
  if (sizeM <1024)
  {
      printf("La fonction MergeBig ne peut pas être prise en compte car sizeA+sizeB <1024");
@@ -238,14 +238,14 @@ int main(int argc, char ** argv)
 
   if (cudaSuccess != cudaMemcpy(M, CudaVecteurM, sizeM * sizeof(TYPE), cudaMemcpyDeviceToHost))
         { printf("PB copie cuda M -> host M \n") ; fflush(stdout);  exit(2) ; }
-    cudaEventRecord(Stop) ;
+    cudaEventRecord(Stop) ; 
 
 
-    check("Check tableau M après", sizeM, M);
-    cudaEventElapsedTime(&m1, Start, Stop) ;
+    check((char *)"Check tableau M après", sizeM, M);
+    cudaEventElapsedTime(&m1, Start, Stop) ; 
     printf("Duree %f s\n",m1/1000) ;
-    //Affiche ("Tableau M", M, sizeM);
-
+    //Affiche ("Tableau M", M, sizeM); 
+  
     //Free
     if (M != NULL ){ free(M); }
     if (A != NULL) { free(A) ; }
@@ -255,7 +255,8 @@ int main(int argc, char ** argv)
     if (CudaVecteurM != NULL) { cudaFree(CudaVecteurM) ; CudaVecteurM = NULL ; }
     if (CudaDiagAy != NULL) { cudaFree(CudaDiagAy) ; CudaDiagAy = NULL ; }
     if (CudaDiagBx != NULL) { cudaFree(CudaDiagBx) ; CudaDiagBx = NULL ; }
-
-   return 0 ;
+ 
+   return 0 ; 
 
 }
+
