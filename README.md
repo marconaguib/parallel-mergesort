@@ -1,1 +1,1 @@
-# Parallel mergesort using CUDA
+## Parallel mergesort using CUDA
