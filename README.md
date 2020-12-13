@@ -5,11 +5,11 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
 ## Scripts :
 - [go](go) : cmd file for compilation
 - For question 1 (as well as getting familiar with GPU kernels):
-  - [main.h](main.h) :
-  - [MyInc.h](MyInc.h) :
-  - [GPUAlgo.cu](GPUAlgo.cu) :
-  - [HostAlgo.cu](HostAlgo.cu) :
-  - [HostTools.cu](HostTools.cu) : Various Allocation/Free functions
+  - [main.h](main.h) : Various Allocation/Free functions
+  - [MyInc.h](MyInc.h) : Function headers
+  - [GPUAlgo.cu](GPUAlgo.cu) : Sorting functions on device
+  - [HostAlgo.cu](HostAlgo.cu) : Sorting functions on host (for comparison)
+  - [HostTools.cu](HostTools.cu) : Testing and measuring tools (on host)
   - [testerCuda.cu](testerCuda.cu) : `MergeSmall_k`: a function that merges two sorted arrays of a total size smaller than 1024, using 1 block and multiple threads
 - [question2.cu](question2.cu) : `MergeBig_k`: a function that merges two sorted "big" arrays using multiple block and multiple threads
 - [question3.cu](question3.cu) : `MergeSort` : looping on `MergeSmall_k` and `MergeBig_k`, this is **NOT** the best we did.
