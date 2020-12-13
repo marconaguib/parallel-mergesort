@@ -10,7 +10,7 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
   - [GPUAlgo.cu](GPUAlgo.cu) : Sorting functions on device
   - [HostAlgo.cu](HostAlgo.cu) : Sorting functions on host (for comparison)
   - [HostTools.cu](HostTools.cu) : Testing, measuring and debugging tools (on host)
-  - [testerCuda.cu](testerCuda.cu) : `MergeSmall_k`: a function that merges two sorted arrays of a total size smaller than 1024, using 1 block and multiple threads
+  - [testerCuda.cu](testerCuda.cu) : `MergeSmall_k`: a function that merges two sorted arrays of a total size smaller than 1024, using 1 block and multiple threads, along with multiple tests depending on how the arrays to merge are filled.
 - [question2.cu](question2.cu) : `MergeBig_k`: a function that merges two sorted "big" arrays using multiple block and multiple threads
 - [question3.cu](question3.cu) : `MergeSort` : looping on `MergeSmall_k` and `MergeBig_k`, this is **NOT** the best we did.
 - [question5.cu](question5.cu) : `MergeSmallBatch_k` : a function that merges two batches of sorted arrays (each of a size smaller than 512), two by two, using multiple block and multiple threads
