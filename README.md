@@ -4,7 +4,7 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
 
 ## Scripts :
 - [go](go) : cmd file for compilation
-- For question 1:
+- For question 1 (as well as getting familiar with GPU kernels):
   - [main.h](main.h) :
   - [MyInc.h](MyInc.h) :
   - [GPUAlgo.cu](GPUAlgo.cu) :
