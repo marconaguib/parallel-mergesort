@@ -4,7 +4,7 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
 
 ## Scripts :
 - [go](go) : cmd file for compilation
-- [main.h](main.h), [MyInc.h](MyInc.h),[GPUAlgo.cu](GPUAlgo.cu),[HOSTAlgo.cu](HOSTAlgo.cu),[GPUTools.cu](GPUTools.cu)  : Various Allocation/Free functions
+- [main.h](main.h), [MyInc.h](MyInc.h),[GPUAlgo.cu](GPUAlgo.cu),[HostAlgo.cu](HostAlgo.cu),[HostTools.cu](GPUTools.cu)  : Various Allocation/Free functions
 - [testerCuda.cu](testerCuda.cu) :
 - [question2.cu](question2.cu) :
 - [question3.cu](question3.cu) :
