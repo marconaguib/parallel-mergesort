@@ -26,7 +26,7 @@ Use the command `./go` to compile all the files. And then you can execute :
 - `./question5`: to examine our code answering question 5
 - `./partie3` : to examine our code answering part 3 
 
-In all these files, you can change the sizes, the values, or the filling rules of the different arrays (A, B or M) thanks to slight, intuitive modifications.
+In all these files, you can change the sizes, the values, or the filling rules of the different arrays (A, B or M) thanks to slight, intuitive modifications in the `main`function.
 
 ## Colab 
 [Here](https://colab.research.google.com/drive/1c57rpU0Xp8E8o8AiUUeqEQTcFT9SJncS?usp=sharing) is the link of the Colab we used during the presentation. It uses most of the functions mentioned, including the MergeSort function.
