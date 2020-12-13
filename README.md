@@ -11,7 +11,7 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
   - [HostAlgo.cu](HostAlgo.cu) :
   - [HostTools.cu](HostTools.cu) : Various Allocation/Free functions
   - [testerCuda.cu](testerCuda.cu) : `MergeSmall_k`: a function that merges two sorted arrays of a total size smaller than 1024, using 1 block and multiple threads
-- [question2.cu](question2.cu) : `MergeBig_k`: a function that merges two sorted arrays using multiple block and multiple threads
+- [question2.cu](question2.cu) : `MergeBig_k`: a function that merges two sorted "big" arrays using multiple block and multiple threads
 - [question3.cu](question3.cu) : `MergeSort` : looping on `MergeSmall_k` and `MergeBig_k`, this is **NOT** the best we did.
 - [question5.cu](question5.cu) : `MergeSmallBatch_k` : a function that merges two batches of sorted arrays (each of a total size smaller than 1024), two by two, using multiple block and multiple threads
 - [partie3.cu](partie3.cu) : `MergeSort` : looping on `MergeSmallBatch_k` and `MergeBig_k`, this is **THE** best mergesort we managed to code, nearly twice as fast as the Numpy mergesort function 
