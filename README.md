@@ -15,7 +15,7 @@ This repo contains scripts we wrote for our HPC project : mergesorting C arrays 
 - [question3.cu](question3.cu) : `MergeSort` : looping on `MergeSmall_k` and `MergeBig_k`, this is **NOT** the best we did.
 - [question5.cu](question5.cu) : `MergeSmallBatch_k` : a function that merges two batches of sorted arrays (each of a size smaller than 512), two by two, using multiple block and multiple threads
 - [partie3.cu](partie3.cu) : `MergeSort` : looping on `MergeSmallBatch_k` and `MergeBig_k`, this is **THE** best mergesort we managed to code, nearly twice as fast as the Numpy sequential mergesort function 
-- [PresentationProjetHPC.pdf.pdf](PresentationProjetHPC.pdf.pdf) : Our presentation in French
+- [codeHPC.cu](codeHPC.cu) : Our most important kernels (for presentation)
 - [PresentationProjetHPC_anglais.pdf](PresentationProjetHPC_anglais.pdf) : Our presentation in English
 
 ## Compilation and execution
@@ -29,7 +29,7 @@ Use the command `./go` to compile all the files. And then you can execute :
 In all these files, you can change the sizes, the values, or the filling rules of the different arrays (A, B or M) thanks to slight, intuitive modifications in the `main`function.
 
 ## Colab 
-[Here](https://colab.research.google.com/drive/1c57rpU0Xp8E8o8AiUUeqEQTcFT9SJncS?usp=sharing) is the link of the Colab we used during the presentation. It uses most of the functions mentioned, including the MergeSort function.
+[Here](https://colab.research.google.com/drive/1c57rpU0Xp8E8o8AiUUeqEQTcFT9SJncS?usp=sharing) is the link of the Colab we used during the project. It uses most of the functions mentioned, including the MergeSort function.
 
 Do not hesitate to contact us in case of any issues.
 
